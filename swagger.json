@@ -40,6 +40,45 @@
                     }
                 }
             }
+        },
+        "/api/v1/token": {
+            "post": {
+                "description": "Obter Token -\nObtenção do token de acesso (access_token) para a utilização da API através do protocolo OAuth 2.0, a string que será utilizada em \"Authorization\" deve ser no formato \"Basic base64(login:password).\"\n",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token de acesso",
+                        "required": true,
+                        "type": "string",
+                        "format": "Basic QVlkbHlEdjBZd05KdVl4NzNSclBjT3BDZXZlM0VtdWdwTGlFSU1iOGZYZ1BVdF84LWF5bVdfaFVkd0NWTzZyZlloUldGTDRoNW9tLXZEM186RUxENnllZXN4SmZubnF6WEdQQVF2Y2VRMi1kY1BpSVpIZjc4Rmh5TTZYeGlhLUtKX0V0S1VyMVVfTFI2R1p4TkNpaEtBbmM2MWx5R21WWE0="
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "title": "Array",
+                            "type": "array",
+                            "items": {
+                                "title": "JSON Object",
+                                "type": "object",
+                                "properties": {
+                                    "access_token": {
+                                        "type": "string"
+                                    },
+                                    "app_id": {
+                                        "type": "string"
+                                    },
+                                    "expires_in": {
+                                        "type": "number"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
