@@ -4,38 +4,351 @@
         "version": "0.0.0",
         "title": "Checkout Sun API"
     },
+    "definitions": {
+        "item": {
+            "type": "object",
+            "required": [
+                "name",
+                "quantity",
+                "price"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Nome do produto."
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Descrição do produto."
+                },
+                "quantity": {
+                    "type": "string",
+                    "description": "Quantidade comprada."
+                },
+                "price": {
+                    "type": "string",
+                    "description": "Preço unitário."
+                },
+                "tax": {
+                    "type": "string",
+                    "description": "Imposto do produto."
+                },
+                "sku": {
+                    "type": "string",
+                    "description": "SKU (Stock Keeping Unit) do produto."
+                }
+            }
+        },
+        "shipping_address": {
+            "type": "object",
+            "required": [
+                "address",
+                "state",
+                "country",
+                "zip_code"
+            ],
+            "properties": {
+                "recipient_name": {
+                    "type": "string",
+                    "description": "Nome responsável pelo recebimento."
+                },
+                "phone": {
+                    "type": "string",
+                    "description": "Telefone para contato."
+                },
+                "address": {
+                    "type": "string",
+                    "description": "Endereço, com número, de entrega."
+                },
+                "complement": {
+                    "type": "string",
+                    "description": "Complemento do enreço."
+                },
+                "state": {
+                    "type": "string",
+                    "description": "Código do estado, em 2 caracteres."
+                },
+                "country": {
+                    "type": "string",
+                    "description": "Código do país, em 2 caracteres."
+                },
+                "zip_code": {
+                    "type": "string",
+                    "description": "CEP de entrega."
+                }
+            }
+        },
+        "detail": {
+            "type": "object",
+            "required": [
+                "subtotal",
+                "tax"
+            ],
+            "properties": {
+                "subtotal": {
+                    "type": "string",
+                    "description": "Subtotal dos itens. Soma total do valor de cada item multiplicado pela respective quantidade."
+                },
+                "tax": {
+                    "type": "string",
+                    "description": "Subtotal dos impostos. Soma total do valor da taxa de cada item multiplicado pela respectiva quantidade."
+                },
+                "shipping": {
+                    "type": "string",
+                    "description": "Valor do frete."
+                },
+                "shipping_discount": {
+                    "type": "string",
+                    "description": "Desconto no frete."
+                },
+                "insurance": {
+                    "type": "string",
+                    "description": "Valor do seguro."
+                }
+            }
+        },
+        "amount": {
+            "type": "object",
+            "required": [
+                "total",
+                "currency"
+            ],
+            "properties": {
+                "total": {
+                    "type": "string",
+                    "description": "Valor total dos pedidos."
+                },
+                "currency": {
+                    "type": "string",
+                    "description": "Código da moeda."
+                },
+                "details": {
+                    "$ref": "#/definitions/detail"
+                }
+            }
+        },
+        "transaction": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "$ref": "#/definitions/amount"
+                },
+                "shipping_address": {
+                    "$ref": "#/definitions/shipping_address"
+                },
+                "item_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/item"
+                    }
+                },
+                "webook_url": {
+                    "type": "string",
+                    "description": "URL para envio de notificações de mudança de status da compra."
+                }
+            }
+        },
+        "transaction_post": {
+            "type": "object",
+            "properties": {
+                "order_id": {
+                    "type": "string",
+                    "description": "Código do pedido no ECommerce"
+                },
+                "transaction": {
+                    "$ref": "#/definitions/transaction"
+                }
+            }
+        },
+        "transaction_post_response": {
+            "type": "object",
+            "properties": {
+                "order_id": {
+                    "type": "string",
+                    "description": "Código do pedido no ECommerce."
+                },
+                "transaction_id": {
+                    "type": "string",
+                    "description": "Código da transação na Eduzz."
+                },
+                "create_time": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Data e hora da criação da transação."
+                },
+                "update_time": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Data e hora da ultima atualização da transação."
+                },
+                "status": {
+                    "type": "string",
+                    "description": "Status da transação."
+                },
+                "payment_method": {
+                    "type": "string",
+                    "description": "Forma de pagamento da transação."
+                },
+                "transaction": {
+                    "$ref": "#/definitions/transaction"
+                }
+            }
+        },
+        "error": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "Descrição do erro."
+                },
+                "errors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
     "paths": {
-        "/persons": {
-            "get": {
-                "description": "Gets `Person` objects.\nOptional query param of **size** determines\nsize of returned array\n",
+        "/api/v1/transaction": {
+            "post": {
+                "description": "Cria uma transação na Eduzz para ser paga pelo cliente.",
+                "produces": [
+                    "application/json"
+                ],
                 "parameters": [
                     {
-                        "name": "size",
-                        "in": "query",
-                        "description": "Size of array",
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token de acesso segundo protocolo OAuth 2.0.",
                         "required": true,
-                        "type": "number",
-                        "format": "double"
+                        "type": "string"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "description": "Mime type dos dados contidos no body. Obrigatório ser application/json.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "transaction_post",
+                        "in": "body",
+                        "description": "Dados da requisição em json.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/transaction_post"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Transação criada!",
+                        "schema": {
+                            "$ref": "#/definitions/transaction_post_response"
+                        }
+                    },
+                    "400": {
+                        "description": "Erro na requisição!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "500": {
+                        "description": "Erro no servidor!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/transactions": {
+            "get": {
+                "description": "Obtém as transações existentes do dono do Token.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token de acesso segundo protocolo OAuth 2.0.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "description": "Quantidade de registros a serem retornados.",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "index",
+                        "in": "query",
+                        "description": "Index do primeiro registro na resposta.",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "start_time",
+                        "in": "query",
+                        "description": "Data e hora inicial do intervalo de registros.",
+                        "type": "string",
+                        "format": "date",
+                        "required": false
+                    },
+                    {
+                        "name": "end_time",
+                        "in": "query",
+                        "description": "Data e hora final do intervalo de registros.",
+                        "type": "string",
+                        "format": "date",
+                        "required": false
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Propriedade a ser utilizada na ordenação dos registros. Aceita \"order_id\", \"transaction_id\", \"create_time\" e \"update_time\".",
+                        "type": "string",
+                        "required": false
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Ordenação dos registros é ascendente por padrão. Aceita \"descending\" para order pelo sort_by descendente.",
+                        "type": "string",
+                        "required": false
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful response",
+                        "description": "Sucesso!",
                         "schema": {
-                            "title": "ArrayOfPersons",
                             "type": "array",
                             "items": {
-                                "title": "Person",
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "type": "string"
-                                    },
-                                    "single": {
-                                        "type": "boolean"
-                                    }
-                                }
+                                "$ref": "#/definitions/transaction_post_response"
                             }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "500": {
+                        "description": "Erro no servidor!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
                         }
                     }
                 }
