@@ -434,7 +434,7 @@
                         "description": "Token de acesso segundo protocolo OAuth 2.0.",
                         "required": true,
                         "type": "string"
-                    },
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -442,7 +442,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                              "$ref": "#/definitions/content"
+                                "$ref": "#/definitions/content"
                             }
                         }
                     },
@@ -487,7 +487,7 @@
                     {
                         "name": "content_id",
                         "in": "path",
-                        "type": "integer",
+                        "type": "string",
                         "required": true,
                         "description": "Atualizar um conteúdo no MyEduzz através do produto ECommerce"
                     },
@@ -516,6 +516,12 @@
                     },
                     "401": {
                         "description": "Não autorizado!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "404": {
+                        "description": "Não encontrado!",
                         "schema": {
                             "$ref": "#/definitions/error"
                         }
@@ -707,6 +713,58 @@
                     },
                     "401": {
                         "description": "Não autorizado!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "500": {
+                        "description": "Erro no servidor!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                }
+            }
+        },
+        "/transaction/{transaction_id}": {
+            "get": {
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token de acesso segundo protocolo OAuth 2.0.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "transaction_id",
+                        "in": "path",
+                        "type": "string",
+                        "required": true,
+                        "description": "Código da transação na Eduzz."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucesso!",
+                        "schema": {
+                            "$ref": "#/definitions/transaction_post_response"
+                        }
+                    },
+                    "400": {
+                        "description": "Erro na requisição!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "404": {
+                        "description": "Não encontrado!",
                         "schema": {
                             "$ref": "#/definitions/error"
                         }
