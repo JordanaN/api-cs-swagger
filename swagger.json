@@ -21,7 +21,7 @@
                 }
             }
         },
-        "response_get": {
+        "content": {
             "type": "object",
             "properties": {
                 "product_id": {
@@ -84,7 +84,10 @@
                     "200": {
                         "description": "Response de sucesso",
                         "schema": {
-                            "$ref": "#/definitions/response_get"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/content"
+                            }
                         }
                     },
                     "400": {
@@ -144,7 +147,10 @@
                     "200": {
                         "description": "Response de sucesso",
                         "schema": {
-                            "$ref": "#/definitions/response_get"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/content"
+                            }
                         }
                     },
                     "400": {
