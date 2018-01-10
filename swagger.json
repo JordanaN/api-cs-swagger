@@ -20,6 +20,38 @@
                     }
                 }
             }
+        },
+        "response_get": {
+            "type": "object",
+            "properties": {
+                "product_id": {
+                    "type": "string"
+                },
+                "content_id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "price": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "tax": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "currency": {
+                    "type": "string"
+                }
+            }
         }
     },
     "paths": {
@@ -37,7 +69,14 @@
                         "name": "Authorization",
                         "in": "header",
                         "type": "string",
-                        "description": "bearer <acessToken>",
+                        "description": "Token de acesso segundo protocolo OAuth 2.0. exemplo = 'bearer <acessToken>'",
+                        "required": true
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "type": "string",
+                        "description": "Mime type dos dados contidos no body. Obrigatório ser application/json.",
                         "required": true
                     }
                 ],
@@ -45,35 +84,7 @@
                     "200": {
                         "description": "Response de sucesso",
                         "schema": {
-                            "properties": {
-                                "product_id": {
-                                    "type": "string"
-                                },
-                                "content_id": {
-                                    "type": "string"
-                                },
-                                "name": {
-                                    "type": "string"
-                                },
-                                "description": {
-                                    "type": "string"
-                                },
-                                "quantity": {
-                                    "type": "number",
-                                    "format": "double"
-                                },
-                                "price": {
-                                    "type": "number",
-                                    "format": "double"
-                                },
-                                "tax": {
-                                    "type": "number",
-                                    "format": "double"
-                                },
-                                "currency": {
-                                    "type": "string"
-                                }
-                            }
+                            "$ref": "#/definitions/response_get"
                         }
                     },
                     "400": {
@@ -111,7 +122,14 @@
                         "name": "Authorization",
                         "in": "header",
                         "type": "string",
-                        "description": "bearer <acessToken>",
+                        "description": "Token de acesso segundo protocolo OAuth 2.0. exemplo = 'bearer <acessToken>'",
+                        "required": true
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "type": "string",
+                        "description": "Mime type dos dados contidos no body. Obrigatório ser application/json.",
                         "required": true
                     },
                     {
@@ -126,35 +144,7 @@
                     "200": {
                         "description": "Response de sucesso",
                         "schema": {
-                            "properties": {
-                                "product_id": {
-                                    "type": "string"
-                                },
-                                "content_id": {
-                                    "type": "string"
-                                },
-                                "name": {
-                                    "type": "string"
-                                },
-                                "description": {
-                                    "type": "string"
-                                },
-                                "quantity": {
-                                    "type": "number",
-                                    "format": "double"
-                                },
-                                "price": {
-                                    "type": "number",
-                                    "format": "double"
-                                },
-                                "tax": {
-                                    "type": "number",
-                                    "format": "double"
-                                },
-                                "currency": {
-                                    "type": "string"
-                                }
-                            }
+                            "$ref": "#/definitions/response_get"
                         }
                     },
                     "400": {
