@@ -60,7 +60,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "Response de sucesso",
                         "schema": {
                             "properties": {
@@ -93,6 +93,54 @@
                                 }
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Erro na requisição!",
+                        "schema": {
+                            "properties": {
+                                "description": {
+                                    "type": "string"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado!",
+                        "schema": {
+                            "properties": {
+                                "description": {
+                                    "type": "string"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro no servidor!",
+                        "schema": {
+                            "properties": {
+                                "description": {
+                                    "type": "string"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -101,11 +149,9 @@
             "patch": {
                 "parameters": [
                     {
-                        "in": "path",
                         "name": "content_id",
-                        "schema": {
-                            "type": "integer"
-                        },
+                        "in": "path",
+                        "type": "integer",
                         "required": true,
                         "description": "Atualizar um conteúdo no MyEduzz através do produto ECommerce"
                     }
@@ -141,6 +187,54 @@
                                 },
                                 "currency": {
                                     "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro na requisição!",
+                        "schema": {
+                            "properties": {
+                                "description": {
+                                    "type": "string"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado!",
+                        "schema": {
+                            "properties": {
+                                "description": {
+                                    "type": "string"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro no servidor!",
+                        "schema": {
+                            "properties": {
+                                "description": {
+                                    "type": "string"
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
                                 }
                             }
                         }
