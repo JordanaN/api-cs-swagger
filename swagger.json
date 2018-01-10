@@ -101,9 +101,271 @@
                     "type": "string"
                 }
             }
+        },
+        "access_token_response": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string",
+                    "description": "Token de acesso as APIs."
+                },
+                "app_id": {
+                    "type": "string",
+                    "description": "Id de aplicação do Ecommerce."
+                },
+                "expires_in": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "Tempo de validade do access_token ."
+                }
+            }
+        },
+        "item": {
+            "type": "object",
+            "required": [
+                "name",
+                "quantity",
+                "price"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Nome do produto."
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Descrição do produto."
+                },
+                "quantity": {
+                    "type": "string",
+                    "description": "Quantidade comprada."
+                },
+                "price": {
+                    "type": "string",
+                    "description": "Preço unitário."
+                },
+                "tax": {
+                    "type": "string",
+                    "description": "Imposto do produto."
+                },
+                "sku": {
+                    "type": "string",
+                    "description": "SKU (Stock Keeping Unit) do produto."
+                }
+            }
+        },
+        "shipping_address": {
+            "type": "object",
+            "required": [
+                "address",
+                "state",
+                "country",
+                "zip_code"
+            ],
+            "properties": {
+                "recipient_name": {
+                    "type": "string",
+                    "description": "Nome responsável pelo recebimento."
+                },
+                "phone": {
+                    "type": "string",
+                    "description": "Telefone para contato."
+                },
+                "address": {
+                    "type": "string",
+                    "description": "Endereço, com número, de entrega."
+                },
+                "complement": {
+                    "type": "string",
+                    "description": "Complemento do enreço."
+                },
+                "state": {
+                    "type": "string",
+                    "description": "Código do estado, em 2 caracteres."
+                },
+                "country": {
+                    "type": "string",
+                    "description": "Código do país, em 2 caracteres."
+                },
+                "zip_code": {
+                    "type": "string",
+                    "description": "CEP de entrega."
+                }
+            }
+        },
+        "detail": {
+            "type": "object",
+            "required": [
+                "subtotal",
+                "tax"
+            ],
+            "properties": {
+                "subtotal": {
+                    "type": "string",
+                    "description": "Subtotal dos itens. Soma total do valor de cada item multiplicado pela respective quantidade."
+                },
+                "tax": {
+                    "type": "string",
+                    "description": "Subtotal dos impostos. Soma total do valor da taxa de cada item multiplicado pela respectiva quantidade."
+                },
+                "shipping": {
+                    "type": "string",
+                    "description": "Valor do frete."
+                },
+                "shipping_discount": {
+                    "type": "string",
+                    "description": "Desconto no frete."
+                },
+                "insurance": {
+                    "type": "string",
+                    "description": "Valor do seguro."
+                }
+            }
+        },
+        "amount": {
+            "type": "object",
+            "required": [
+                "total",
+                "currency"
+            ],
+            "properties": {
+                "total": {
+                    "type": "string",
+                    "description": "Valor total dos pedidos."
+                },
+                "currency": {
+                    "type": "string",
+                    "description": "Código da moeda."
+                },
+                "details": {
+                    "$ref": "#/definitions/detail"
+                }
+            }
+        },
+        "transaction": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "$ref": "#/definitions/amount"
+                },
+                "shipping_address": {
+                    "$ref": "#/definitions/shipping_address"
+                },
+                "item_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/item"
+                    }
+                },
+                "webook_url": {
+                    "type": "string",
+                    "description": "URL para envio de notificações de mudança de status da compra."
+                }
+            }
+        },
+        "transaction_post": {
+            "type": "object",
+            "properties": {
+                "order_id": {
+                    "type": "string",
+                    "description": "Código do pedido no ECommerce"
+                },
+                "transaction": {
+                    "$ref": "#/definitions/transaction"
+                }
+            }
+        },
+        "transaction_post_response": {
+            "type": "object",
+            "properties": {
+                "order_id": {
+                    "type": "string",
+                    "description": "Código do pedido no ECommerce."
+                },
+                "transaction_id": {
+                    "type": "string",
+                    "description": "Código da transação na Eduzz."
+                },
+                "create_time": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Data e hora da criação da transação."
+                },
+                "update_time": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Data e hora da ultima atualização da transação."
+                },
+                "status": {
+                    "type": "string",
+                    "description": "Status da transação."
+                },
+                "payment_method": {
+                    "type": "string",
+                    "description": "Forma de pagamento da transação."
+                },
+                "transaction": {
+                    "$ref": "#/definitions/transaction"
+                }
+            }
+        },
+        "error": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "Descrição do erro."
+                },
+                "errors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
         }
     },
     "paths": {
+        "/token": {
+            "post": {
+                "description": "Obter Token - Obtenção do token de acesso (access_token) para a utilização da API através do protocolo OAuth 2.0",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Basic base64(login:password).",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Token de acesso criado!",
+                        "schema": {
+                            "$ref": "#/definitions/access_token_response"
+                        }
+                    },
+                    "400": {
+                        "description": "Erro na requisição!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "500": {
+                        "description": "Erro no servidor!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                }
+            }
+        },
         "/content": {
             "post": {
                 "consumes": [
@@ -114,6 +376,13 @@
                 ],
                 "description": "Criar Conteúdo - Cria um conteúdo no MyEduzz através de um produto do E-Commerce\n",
                 "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token de acesso segundo protocolo OAuth 2.0.",
+                        "required": true,
+                        "type": "string"
+                    },
                     {
                         "name": "content",
                         "in": "body",
@@ -133,49 +402,66 @@
                     "400": {
                         "description": "Erro na requisição!",
                         "schema": {
-                            "properties": {
-                                "description": {
-                                    "type": "string"
-                                },
-                                "errors": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
+                            "$ref": "#/definitions/error"
                         }
                     },
                     "401": {
                         "description": "Não autorizado!",
                         "schema": {
-                            "properties": {
-                                "description": {
-                                    "type": "string"
-                                },
-                                "errors": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
+                            "$ref": "#/definitions/error"
                         }
                     },
                     "500": {
                         "description": "Erro no servidor!",
                         "schema": {
-                            "properties": {
-                                "description": {
-                                    "type": "string"
-                                },
-                                "errors": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "description": "Retorna uma lista de conteúdos criado no MyEduzz pelo e-commerce",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token de acesso segundo protocolo OAuth 2.0.",
+                        "required": true,
+                        "type": "string"
+                    },
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Response de sucesso",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                              "$ref": "#/definitions/content"
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro na requisição!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "500": {
+                        "description": "Erro no servidor!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
                         }
                     }
                 }
@@ -183,13 +469,36 @@
         },
         "/content/{content_id}": {
             "patch": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "description": "Altera um conteúdo no MyEduzz a partir de um produto do E-commerce",
                 "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token de acesso segundo protocolo OAuth 2.0.",
+                        "required": true,
+                        "type": "string"
+                    },
                     {
                         "name": "content_id",
                         "in": "path",
                         "type": "integer",
                         "required": true,
                         "description": "Atualizar um conteúdo no MyEduzz através do produto ECommerce"
+                    },
+                    {
+                        "name": "content",
+                        "in": "body",
+                        "required": true,
+                        "description": "Conteúdo a ser atualizado",
+                        "schema": {
+                            "$ref": "#/definitions/content_to_update"
+                        }
                     }
                 ],
                 "responses": {
@@ -202,49 +511,210 @@
                     "400": {
                         "description": "Erro na requisição!",
                         "schema": {
-                            "properties": {
-                                "description": {
-                                    "type": "string"
-                                },
-                                "errors": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "500": {
+                        "description": "Erro no servidor!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "description": "Retorna uma lista de conteúdos criado no MyEduzz pelo e-commerce",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token de acesso segundo protocolo OAuth 2.0.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "content_id",
+                        "in": "path",
+                        "type": "string",
+                        "description": "ID do conteúdo",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Response de sucesso",
+                        "schema": {
+                            "$ref": "#/definitions/content"
+                        }
+                    },
+                    "400": {
+                        "description": "Erro na requisição!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "500": {
+                        "description": "Erro no servidor!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                }
+            }
+        },
+        "/transaction": {
+            "post": {
+                "description": "Cria uma transação na Eduzz para ser paga pelo cliente.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token de acesso segundo protocolo OAuth 2.0.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "transaction_post",
+                        "in": "body",
+                        "description": "Dados da requisição em json.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/transaction_post"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Transação criada!",
+                        "schema": {
+                            "$ref": "#/definitions/transaction_post_response"
+                        }
+                    },
+                    "400": {
+                        "description": "Erro na requisição!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "500": {
+                        "description": "Erro no servidor!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "description": "Obtém as transações existentes do dono do Token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Token de acesso segundo protocolo OAuth 2.0.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "description": "Quantidade de registros a serem retornados.",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "index",
+                        "in": "query",
+                        "description": "Index do primeiro registro na resposta.",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "start_time",
+                        "in": "query",
+                        "description": "Data e hora inicial do intervalo de registros.",
+                        "type": "string",
+                        "format": "date",
+                        "required": false
+                    },
+                    {
+                        "name": "end_time",
+                        "in": "query",
+                        "description": "Data e hora final do intervalo de registros.",
+                        "type": "string",
+                        "format": "date",
+                        "required": false
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Propriedade a ser utilizada na ordenação dos registros. Aceita \"order_id\", \"transaction_id\", \"create_time\" e \"update_time\".",
+                        "type": "string",
+                        "required": false
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Ordenação dos registros é ascendente por padrão. Aceita \"descending\" para order pelo sort_by descendente.",
+                        "type": "string",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucesso!",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/transaction_post_response"
                             }
                         }
                     },
                     "401": {
                         "description": "Não autorizado!",
                         "schema": {
-                            "properties": {
-                                "description": {
-                                    "type": "string"
-                                },
-                                "errors": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
+                            "$ref": "#/definitions/error"
                         }
                     },
                     "500": {
                         "description": "Erro no servidor!",
                         "schema": {
-                            "properties": {
-                                "description": {
-                                    "type": "string"
-                                },
-                                "errors": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
+                            "$ref": "#/definitions/error"
                         }
                     }
                 }
