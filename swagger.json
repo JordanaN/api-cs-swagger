@@ -4,77 +4,74 @@
         "version": "0.0.0",
         "title": "Checkout Sun API"
     },
-    "paths": {
-        "/persons": {
-            "get": {
-                "description": "Gets `Person` objects.\nOptional query param of **size** determines\nsize of returned array\n",
-                "parameters": [
-                    {
-                        "name": "size",
-                        "in": "query",
-                        "description": "Size of array",
-                        "required": true,
-                        "type": "number",
-                        "format": "double"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "schema": {
-                            "title": "ArrayOfPersons",
-                            "type": "array",
-                            "items": {
-                                "title": "Person",
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "type": "string"
-                                    },
-                                    "single": {
-                                        "type": "boolean"
-                                    }
-                                }
-                            }
-                        }
-                    }
+    "definitions": {
+        "access_token_response": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string",
+                    "description": "Token de acesso as APIs."
+                },
+                "app_id": {
+                    "type": "string",
+                    "description": "Id de aplicação do Ecommerce."
+                },
+                "expires_in": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "Tempo de validade do access_token ."
                 }
             }
         },
+        "error": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "Descrição do erro."
+                },
+                "errors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
         "/api/v1/token": {
             "post": {
-                "description": "Obter Token -\nObtenção do token de acesso (access_token) para a utilização da API através do protocolo OAuth 2.0, a string que será utilizada em \"Authorization\" deve ser no formato \"Basic base64(login:password).\"\n",
+                "description": "Obter Token - Obtenção do token de acesso (access_token) para a utilização da API através do protocolo OAuth 2.0, a string que será utilizada em \"Authorization\" deve ser no formato \"Basic base64(login:password).\"",
+                "produces": [
+                    "application/json"
+                ],
                 "parameters": [
                     {
                         "name": "Authorization",
                         "in": "header",
-                        "description": "Token de acesso",
+                        "description": "Token de acesso segundo protocolo OAuth 2.0.",
                         "required": true,
-                        "type": "string",
-                        "format": "Basic QVlkbHlEdjBZd05KdVl4NzNSclBjT3BDZXZlM0VtdWdwTGlFSU1iOGZYZ1BVdF84LWF5bVdfaFVkd0NWTzZyZlloUldGTDRoNW9tLXZEM186RUxENnllZXN4SmZubnF6WEdQQVF2Y2VRMi1kY1BpSVpIZjc4Rmh5TTZYeGlhLUtKX0V0S1VyMVVfTFI2R1p4TkNpaEtBbmM2MWx5R21WWE0="
+                        "type": "string"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful response",
+                        "description": "Token de acesso criado!",
                         "schema": {
-                            "title": "Array",
-                            "type": "array",
-                            "items": {
-                                "title": "JSON Object",
-                                "type": "object",
-                                "properties": {
-                                    "access_token": {
-                                        "type": "string"
-                                    },
-                                    "app_id": {
-                                        "type": "string"
-                                    },
-                                    "expires_in": {
-                                        "type": "number"
-                                    }
-                                }
-                            }
+                            "$ref": "#/definitions/access_token_response"
+                        }
+                    },
+                    "400": {
+                        "description": "Erro na requisição!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "500": {
+                        "description": "Erro no servidor!",
+                        "schema": {
+                            "$ref": "#/definitions/error"
                         }
                     }
                 }
