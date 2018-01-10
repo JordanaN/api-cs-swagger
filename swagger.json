@@ -1,39 +1,214 @@
 {
     "swagger": "2.0",
     "info": {
-        "version": "0.0.0",
+        "version": "1.0.0",
         "title": "Checkout Sun API"
     },
+    "basePath": "/api/v1",
     "paths": {
-        "/persons": {
-            "get": {
-                "description": "Gets `Person` objects.\nOptional query param of **size** determines\nsize of returned array\n",
+        "/content": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "description": "Criar Conteúdo - Cria um conteúdo no MyEduzz através de um produto do E-Commerce\n",
                 "parameters": [
                     {
-                        "name": "size",
-                        "in": "query",
-                        "description": "Size of array",
-                        "required": true,
-                        "type": "number",
-                        "format": "double"
+                        "name": "content",
+                        "in": "body",
+                        "description": "Conteúdo a ser criado no MyEduzz a partir de um e-commerce",
+                        "schema": {
+                            "required": [
+                                "product_id",
+                                "name",
+                                "description",
+                                "quantity",
+                                "price",
+                                "tax",
+                                "currency"
+                            ],
+                            "properties": {
+                                "product_id": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "quantity": {
+                                    "type": "number",
+                                    "format": "double"
+                                },
+                                "price": {
+                                    "type": "number",
+                                    "format": "double"
+                                },
+                                "tax": {
+                                    "type": "number",
+                                    "format": "double"
+                                },
+                                "currency": {
+                                    "type": "string"
+                                }
+                            }
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful response",
+                        "description": "Response de sucesso",
                         "schema": {
-                            "title": "ArrayOfPersons",
-                            "type": "array",
-                            "items": {
-                                "title": "Person",
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "type": "string"
-                                    },
-                                    "single": {
-                                        "type": "boolean"
-                                    }
+                            "properties": {
+                                "product_id": {
+                                    "type": "string"
+                                },
+                                "content_id": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "quantity": {
+                                    "type": "number",
+                                    "format": "double"
+                                },
+                                "price": {
+                                    "type": "number",
+                                    "format": "double"
+                                },
+                                "tax": {
+                                    "type": "number",
+                                    "format": "double"
+                                },
+                                "currency": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contents": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Retorna uma lista de conteúdos criado no MyEduzz pelo e-commerce",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "type": "string",
+                        "description": "bearer <acessToken>",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Response de sucesso",
+                        "schema": {
+                            "properties": {
+                                "product_id": {
+                                    "type": "string"
+                                },
+                                "content_id": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "quantity": {
+                                    "type": "number",
+                                    "format": "double"
+                                },
+                                "price": {
+                                    "type": "number",
+                                    "format": "double"
+                                },
+                                "tax": {
+                                    "type": "number",
+                                    "format": "double"
+                                },
+                                "currency": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/content/{content_id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Retorna uma lista de conteúdos criado no MyEduzz pelo e-commerce",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "type": "string",
+                        "description": "bearer <acessToken>",
+                        "required": true
+                    },
+                    {
+                        "name": "content_id",
+                        "in": "path",
+                        "type": "string",
+                        "description": "ID do conteúdo",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Response de sucesso",
+                        "schema": {
+                            "properties": {
+                                "product_id": {
+                                    "type": "string"
+                                },
+                                "content_id": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "quantity": {
+                                    "type": "number",
+                                    "format": "double"
+                                },
+                                "price": {
+                                    "type": "number",
+                                    "format": "double"
+                                },
+                                "tax": {
+                                    "type": "number",
+                                    "format": "double"
+                                },
+                                "currency": {
+                                    "type": "string"
                                 }
                             }
                         }
