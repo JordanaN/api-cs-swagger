@@ -96,6 +96,57 @@
                     }
                 }
             }
+        },
+        "/content/{content_id}": {
+            "patch": {
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "content_id",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true,
+                        "description": "Atualizar um conteúdo no MyEduzz através do produto ECommerce"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Response de sucesso",
+                        "schema": {
+                            "properties": {
+                                "product_id": {
+                                    "type": "string"
+                                },
+                                "content_id": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "quantity": {
+                                    "type": "number",
+                                    "format": "double"
+                                },
+                                "price": {
+                                    "type": "number",
+                                    "format": "double"
+                                },
+                                "tax": {
+                                    "type": "number",
+                                    "format": "double"
+                                },
+                                "currency": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
